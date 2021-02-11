@@ -1,3 +1,5 @@
+cargo-features = ["strip"]
+
 [package]
 name = "rsx"
 version = "0.1.0"
@@ -10,3 +12,8 @@ license = "MIT"
 
 [dependencies]
 crossterm = "0.19"
+
+[profile.release]
+lto = true
+opt-level = "s"
+strip = "symbols"
