@@ -1,0 +1,9 @@
+[package]
+name = "rsx-prompt"
+version = "0.1.0"
+authors = ["Vladislav Mamon <norskeld@gmail.com>"]
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+crossterm = "0.19"

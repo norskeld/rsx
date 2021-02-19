@@ -1,0 +1,11 @@
+[package]
+name = "rsx-cli"
+version = "0.1.0"
+authors = ["Vladislav Mamon <norskeld@gmail.com>"]
+description = "Micro CLI to interactively run npm & yarn scripts."
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+rsx-app = { path = "../rsx-app" }
+rsx-prompt = { path = "../rsx-prompt" }

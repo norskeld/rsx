@@ -1,10 +1,8 @@
-mod loader;
-mod prompt;
-
-use prompt::{Prompt, SelectPrompt};
+use rsx_prompt::{Prompt, SelectPrompt};
+use rsx_app::load_scripts;
 
 fn main() {
-  let options = loader::load_scripts();
+  let options = load_scripts();
   let mut prompt = SelectPrompt::new("Pick a script to execute", options, 64);
 
   match prompt.run() {

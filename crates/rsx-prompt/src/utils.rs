@@ -1,7 +1,7 @@
-use crossterm::event::{KeyEvent, KeyModifiers, KeyCode};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use crossterm::style::{style, Color, PrintStyledContent};
 
-use crate::prompt::{Symbols, State};
+use crate::{State, Symbols};
 
 pub fn is_event_abortable(event: KeyEvent) -> bool {
   let KeyEvent { modifiers, code } = event;

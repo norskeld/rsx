@@ -1,12 +1,13 @@
-use std::io::{stdout, Write};
+use std::io;
+use std::io::Write;
 
 use crossterm::{cursor, queue};
 use crossterm::event::{read, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::style::{style, Attribute, Color, Print, PrintStyledContent};
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode, size as terminal_size, Clear, ClearType};
 
-use crate::prompt::{Prompt, Symbols, State};
-use crate::prompt::utils::{calculate_limit_indexes, print_state_symbol, is_event_abortable};
+use crate::{Prompt, State, Symbols};
+use crate::utils::{calculate_limit_indexes, is_event_abortable, print_state_symbol};
 
 pub struct SelectPrompt<T> {
   message: String,
@@ -63,18 +64,18 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
         | State::Aborted => {
           disable_raw_mode()?;
           return Ok(None);
-        }
+        },
         | State::Completed => {
           disable_raw_mode()?;
           return Ok(Some(self.items[self.current].clone()));
-        }
-        | _ => {}
+        },
+        | _ => {},
       }
     }
   }
 
   fn render(&mut self) -> crossterm::Result<()> {
-    let mut stdout = stdout();
+    let mut stdout = io::stdout();
     let (_, rows) = terminal_size()?;
 
     let limit = self.items.len();
@@ -158,7 +159,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
       match event.code {
         | KeyCode::Char('a') => self.current = 0,
         | KeyCode::Char('e') => self.current = self.items.len() - 1,
-        | _ => {}
+        | _ => {},
       }
     }
 
@@ -169,7 +170,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
         | KeyCode::End => self.current = self.items.len() - 1,
         | KeyCode::Char('k') | KeyCode::Up => self.current = self.current.saturating_sub(1),
         | KeyCode::Char('j') | KeyCode::Down => self.current = std::cmp::min(self.current + 1, self.items.len() - 1),
-        | _ => {}
+        | _ => {},
       }
     }
   }
