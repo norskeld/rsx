@@ -1,5 +1,7 @@
 use std::io;
 use std::io::Write;
+use std::fmt::{Debug, Display, Formatter};
+use std::clone::Clone;
 
 use crossterm::{cursor, queue};
 use crossterm::event::{read, Event, KeyCode, KeyEvent, KeyModifiers};
@@ -17,8 +19,8 @@ pub struct SelectPrompt<T> {
   limit: usize,
 }
 
-impl<T: std::fmt::Debug> std::fmt::Debug for SelectPrompt<T> {
-  fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl<T: Debug> Debug for SelectPrompt<T> {
+  fn fmt(&self, fmt: &mut Formatter) -> std::fmt::Result {
     fmt
       .debug_struct("SelectPrompt")
       .field("message", &self.message)
@@ -27,11 +29,8 @@ impl<T: std::fmt::Debug> std::fmt::Debug for SelectPrompt<T> {
   }
 }
 
-impl<T: std::clone::Clone + std::fmt::Display> SelectPrompt<T> {
-  pub fn new<S>(message: S, items: Vec<T>, limit: usize) -> SelectPrompt<T>
-  where
-    S: Into<String>,
-  {
+impl<T: Clone + Display> SelectPrompt<T> {
+  pub fn new<S: Into<String>>(message: S, items: Vec<T>, limit: usize) -> SelectPrompt<T> {
     SelectPrompt {
       message: message.into(),
       state: State::default(),
@@ -45,7 +44,7 @@ impl<T: std::clone::Clone + std::fmt::Display> SelectPrompt<T> {
 /// TODO: This impl must be refactored:
 ///   - Replace `queue!` macro w/ function variant.
 ///   - Decouple rendering and formatting.
-impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
+impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
   fn run(&mut self) -> std::result::Result<Option<T>, crossterm::ErrorKind> {
     enable_raw_mode()?;
 
@@ -102,7 +101,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
       PrintStyledContent(style(&self.message).attribute(Attribute::Bold))
     )?;
 
-    if !self.state.is_completed() {
+    if !self.state.is_done() {
       for idx in start_index..end_index {
         let choice = self.items[idx].to_string();
 
@@ -141,7 +140,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
     //   )?;
     // }
 
-    if self.state.is_completed() {
+    if self.state.is_done() {
       queue!(stdout, Print("\n\r"), cursor::Show)?;
     }
 
