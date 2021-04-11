@@ -1,6 +1,6 @@
 [workspace]
-members = ["crates/rsx-cli", "crates/rsx-app", "crates/rsx-prompt"]
-default-members = ["crates/rsx-cli"]
+members = ["crates/rsx", "crates/rsx-app", "crates/rsx-prompt"]
+default-members = ["crates/rsx"]
 
 [profile.release]
 lto = true
