@@ -1,10 +1,13 @@
 use std::fmt::{Display, Formatter, Result};
 
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+/// Represents a single script in `package.json`'s `scripts` field.
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Script {
   pub id: usize,
-  pub script: &'static str,
-  pub command: &'static str,
+  pub script: String,
+  pub command: String,
 }
 
 impl Display for Script {
