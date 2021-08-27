@@ -1,5 +1,5 @@
 [package]
-name = "rsx-cli"
+name = "rsx"
 version = "0.1.0"
 authors = ["Vladislav Mamon <norskeld@gmail.com>"]
 description = "Micro CLI to interactively run npm & yarn scripts."
