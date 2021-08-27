@@ -15,15 +15,27 @@ fn resolve_pkg_path() -> Result<PathBuf, AppError> {
   }
 }
 
-/// Produces a collection of `Script`s, extracted from a given `serde_json::Map`.
+/// Produces a collection of `Script`s extracted from a given `serde_json::Map`.
 fn produce_scripts(scripts_map: &Map<String, Value>) -> Vec<Script> {
   scripts_map
     .into_iter()
     .enumerate()
-    .map(|(index, (key, value))| Script {
-      id: index,
-      script: key.to_string(),
-      command: value.to_string(),
+    .map(|(index, (key, value))| {
+      let script = key.to_string();
+
+      // Raw conversion to string leaves JSON representation, so strings are in quotes. This piece works that around.
+      // Also we gracefully default to an empty string if command in JSON wasn't actually a string, and instead it was
+      // `null` or something else.
+      let command = match value.as_str() {
+        | Some(command) => command.to_string(),
+        | None => "".to_string(),
+      };
+
+      Script {
+        id: index,
+        script,
+        command,
+      }
     })
     .collect::<Vec<Script>>()
 }
