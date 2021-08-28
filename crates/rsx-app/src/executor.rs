@@ -9,11 +9,10 @@ pub fn execute_script(package_manager: PackageManager, script: Script) -> Result
   // We need only the `script` field, so destructuring it on assignment.
   let Script { script, .. } = script;
 
+  // npm/pnpm run some-script
+  // yarn some-script
   let cmd_args = match package_manager {
-    // npm/pnpm run some-script
     | PackageManager::Npm | PackageManager::Pnpm => vec!["run", script.as_str()],
-
-    // yarn some-script
     | PackageManager::Yarn => vec![script.as_str()],
   };
 
