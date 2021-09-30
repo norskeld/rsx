@@ -1,5 +1,5 @@
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
-use crossterm::style::{style, Color, PrintStyledContent};
+use crossterm::style::{style, Color, PrintStyledContent, Stylize};
 
 use super::{State, Symbols};
 

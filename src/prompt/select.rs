@@ -4,7 +4,7 @@ use std::io::{self, Write};
 
 use crossterm::{cursor, queue};
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
-use crossterm::style::{style, Attribute, Color, Print, PrintStyledContent};
+use crossterm::style::{style, Attribute, Color, Print, PrintStyledContent, Stylize};
 use crossterm::terminal::{self, Clear, ClearType};
 
 use super::{Prompt, State, Symbols};
