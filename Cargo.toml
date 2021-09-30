@@ -6,7 +6,11 @@ description = "Micro CLI to interactively run npm & yarn scripts."
 edition = "2018"
 license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-crossterm = "0.18.2"
+crossterm = "0.19"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+
+[profile.release]
+lto = true
+opt-level = "s"
