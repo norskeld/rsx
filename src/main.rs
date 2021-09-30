@@ -1,15 +1,41 @@
-mod loader;
+mod app;
 mod prompt;
 
-use prompt::{Prompt, SelectPrompt};
+use std::process;
+
+use app::{PackageManager, Script};
+use prompt::{Prompt, SelectPrompt, Symbols};
 
 fn main() {
-  let options = loader::load_scripts();
-  let mut prompt = SelectPrompt::new("Pick a script to execute", options, 64);
+  match app::load_scripts() {
+    | Ok(options) => {
+      let pm = PackageManager::Npm; // TODO: Get this from env/cmd.
+      let limit = options.len() * 2;
 
-  match prompt.run() {
-    | Ok(Some(item)) => println!("Executing: {} {}", item.script, item.command),
-    | Ok(None) => println!("Nothing was picked. Bye!"),
-    | Err(error) => println!("Oof, something happened: {:?}", error),
-  }
+      let mut prompt = SelectPrompt::new("Pick a script to execute", options, limit);
+
+      match prompt.run() {
+        | Ok(Some(item)) => {
+          let Script { script, command, .. } = &item;
+          let separator = Symbols::MiddleDot.as_str();
+
+          println!("Executing: {} {} {}", script, separator, command);
+
+          match app::execute_script(pm, item) {
+            | Err(error) => {
+              println!("{}", error);
+              process::exit(1);
+            },
+            | _ => {},
+          }
+        },
+        | Ok(None) => println!("Nothing was picked. Bye!"),
+        | Err(error) => println!("Oof, something happened: {:?}", error),
+      }
+    },
+    | Err(error) => {
+      println!("{}", error);
+      process::exit(1);
+    },
+  };
 }
