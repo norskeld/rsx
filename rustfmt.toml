@@ -17,7 +17,6 @@ match_block_trailing_comma = true
 
 # General width constraints.
 max_width = 120
-chain_width = 40
 
 # Match tweaks.
 match_arm_leading_pipes = "Always" # Because I'm a weirdo.
