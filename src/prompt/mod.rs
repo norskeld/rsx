@@ -1,4 +1,4 @@
-// Re-export module public API.
+// Public API.
 pub use base::{Prompt, State};
 pub use select::SelectPrompt;
 pub use symbols::Symbols;
@@ -7,6 +7,4 @@ pub use symbols::Symbols;
 mod base;
 mod select;
 mod symbols;
-
-// Public modules.
-pub mod utils;
+mod utils;

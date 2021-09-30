@@ -13,7 +13,7 @@ pub enum State {
 }
 
 impl State {
-  pub fn is_completed(&self) -> bool {
+  pub fn is_done(&self) -> bool {
     *self == State::Aborted || *self == State::Completed
   }
 }

@@ -1,12 +1,14 @@
-use std::io::{stdout, Write};
+use std::clone::Clone;
+use std::fmt::{self, Debug, Display, Formatter};
+use std::io::{self, Write};
 
 use crossterm::{cursor, queue};
-use crossterm::event::{read, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::style::{style, Attribute, Color, Print, PrintStyledContent};
-use crossterm::terminal::{disable_raw_mode, enable_raw_mode, size as terminal_size, Clear, ClearType};
+use crossterm::terminal::{self, Clear, ClearType};
 
-use crate::prompt::{Prompt, Symbols, State};
-use crate::prompt::utils::{calculate_limit_indexes, print_state_symbol, is_event_abortable};
+use super::{Prompt, State, Symbols};
+use super::utils;
 
 pub struct SelectPrompt<T> {
   message: String,
@@ -16,8 +18,8 @@ pub struct SelectPrompt<T> {
   limit: usize,
 }
 
-impl<T: std::fmt::Debug> std::fmt::Debug for SelectPrompt<T> {
-  fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl<T: Debug> Debug for SelectPrompt<T> {
+  fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
     fmt
       .debug_struct("SelectPrompt")
       .field("message", &self.message)
@@ -26,11 +28,8 @@ impl<T: std::fmt::Debug> std::fmt::Debug for SelectPrompt<T> {
   }
 }
 
-impl<T: std::clone::Clone + std::fmt::Display> SelectPrompt<T> {
-  pub fn new<S>(message: S, items: Vec<T>, limit: usize) -> SelectPrompt<T>
-  where
-    S: Into<String>,
-  {
+impl<T: Clone + Display> SelectPrompt<T> {
+  pub fn new<S: Into<String>>(message: S, items: Vec<T>, limit: usize) -> SelectPrompt<T> {
     SelectPrompt {
       message: message.into(),
       state: State::default(),
@@ -44,15 +43,15 @@ impl<T: std::clone::Clone + std::fmt::Display> SelectPrompt<T> {
 /// TODO: This impl must be refactored:
 ///   - Replace `queue!` macro w/ function variant.
 ///   - Decouple rendering and formatting.
-impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
-  fn run(&mut self) -> std::result::Result<Option<T>, crossterm::ErrorKind> {
-    enable_raw_mode()?;
+impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
+  fn run(&mut self) -> Result<Option<T>, crossterm::ErrorKind> {
+    terminal::enable_raw_mode()?;
 
     // Initial render.
     self.render()?;
 
     loop {
-      if let Event::Key(event) = read()? {
+      if let Event::Key(event) = event::read()? {
         self.handle(event)
       }
 
@@ -61,26 +60,26 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
 
       match self.state {
         | State::Aborted => {
-          disable_raw_mode()?;
+          terminal::disable_raw_mode()?;
           return Ok(None);
-        }
+        },
         | State::Completed => {
-          disable_raw_mode()?;
+          terminal::disable_raw_mode()?;
           return Ok(Some(self.items[self.current].clone()));
-        }
-        | _ => {}
+        },
+        | _ => {},
       }
     }
   }
 
   fn render(&mut self) -> crossterm::Result<()> {
-    let mut stdout = stdout();
-    let (_, rows) = terminal_size()?;
+    let mut stdout = io::stdout();
+    let (_, rows) = terminal::size()?;
 
     let limit = self.items.len();
     let total = std::cmp::min(self.limit, (rows - 1) as usize);
 
-    let (start_index, end_index) = calculate_limit_indexes(self.current, limit, total);
+    let (start_index, end_index) = utils::calculate_limit_indexes(self.current, limit, total);
 
     if self.state == State::Created {
       queue!(stdout, cursor::Hide)?;
@@ -96,12 +95,12 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
 
     queue!(
       stdout,
-      print_state_symbol(&self.state),
+      utils::print_state_symbol(&self.state),
       Print(" "),
       PrintStyledContent(style(&self.message).attribute(Attribute::Bold))
     )?;
 
-    if !self.state.is_completed() {
+    if !self.state.is_done() {
       for idx in start_index..end_index {
         let choice = self.items[idx].to_string();
 
@@ -140,7 +139,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
     //   )?;
     // }
 
-    if self.state.is_completed() {
+    if self.state.is_done() {
       queue!(stdout, Print("\n\r"), cursor::Show)?;
     }
 
@@ -149,7 +148,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
   }
 
   fn handle(&mut self, event: KeyEvent) {
-    if is_event_abortable(event) {
+    if utils::is_event_abortable(event) {
       self.state = State::Aborted;
       return;
     }
@@ -158,7 +157,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
       match event.code {
         | KeyCode::Char('a') => self.current = 0,
         | KeyCode::Char('e') => self.current = self.items.len() - 1,
-        | _ => {}
+        | _ => {},
       }
     }
 
@@ -169,7 +168,7 @@ impl<T: std::clone::Clone + std::fmt::Display> Prompt<T> for SelectPrompt<T> {
         | KeyCode::End => self.current = self.items.len() - 1,
         | KeyCode::Char('k') | KeyCode::Up => self.current = self.current.saturating_sub(1),
         | KeyCode::Char('j') | KeyCode::Down => self.current = std::cmp::min(self.current + 1, self.items.len() - 1),
-        | _ => {}
+        | _ => {},
       }
     }
   }
