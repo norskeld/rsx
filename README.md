@@ -1,6 +1,6 @@
-# :zap: rsx
+# `»` rsx
 
-> Micro CLI to interactively run npm & yarn scripts.
+Micro CLI for interactive execution of npm & yarn scripts.
 
 ## License
 
