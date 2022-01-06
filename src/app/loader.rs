@@ -57,7 +57,7 @@ pub fn load_scripts() -> Result<Vec<Script>, AppError> {
   // Try to read contents.
   let mut pkg_contents = String::new();
 
-  if let Err(_) = pkg_file.read_to_string(&mut pkg_contents) {
+  if pkg_file.read_to_string(&mut pkg_contents).is_err() {
     return Err(AppError("Couldn't read the `package.json`.".to_string()));
   }
 
@@ -73,10 +73,10 @@ pub fn load_scripts() -> Result<Vec<Script>, AppError> {
 
     // Check if the `scripts` field is parseable, i.e. it's an object.
     if let Some(map) = scripts_map {
-      if map.len() == 0 {
+      if map.is_empty() {
         Err(AppError("No scripts found.".to_string()))
       } else {
-        Ok(produce_scripts(&map))
+        Ok(produce_scripts(map))
       }
     } else {
       Err(AppError("Couldn't parse the `scripts` field.".to_string()))

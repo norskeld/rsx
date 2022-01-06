@@ -1,4 +1,5 @@
 /// Supported/available package managers.
+#[allow(dead_code)]
 pub enum PackageManager {
   Npm,
   Pnpm,
