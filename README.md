@@ -20,17 +20,20 @@ If you are like me—read on.
 Basic:
 
 - [x] Interactively select and run scripts from `package.json` in the current working directory.
-- [ ] Use different package managers: **npm**, **pnpm**, or **yarn**.
-- [ ] Override default package manager (**npm**) through env variable.
+- [x] Use different package managers: **npm**, **pnpm**, or **yarn**.
+- [x] Override default package manager (**npm**) through env variable.
 
 Planned:
 
-- [ ] Quickly find a script by simply typing its name.
+- [ ] Prettify output.
+- [ ] Quickly find scripts by simply typing their name.
 - [ ] Select multiple scripts and run them in order.
 - [ ] Pass a script name (or names) directly as argument.
-- [ ] Maybe support monorepos.
 
-Maybe I'll come up with new ideas later.
+Maybe:
+
+- [ ] Maybe support `packageManager` field in `package.json`.
+- [ ] Maybe support monorepos.
 
 ## License
 
