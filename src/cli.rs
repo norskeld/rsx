@@ -1,7 +1,10 @@
+use std::env;
+
 use clap::{App, ArgGroup};
 
 use crate::app::PackageManager;
 
+/// Creates a clap app.
 pub fn create_cli() -> App<'static> {
   const PM_HEADING: &str = "PACKAGE MANAGERS";
 
@@ -32,20 +35,37 @@ pub fn create_cli() -> App<'static> {
     )
 }
 
+/// Resolves package manager from env and/or clap app. Rules:
+///
+/// - Flags have priority over everything.
+/// - If `SX_PM` is set to something valid and no flag present, then use it.
+/// - If nothing else matched, use the default package manager - `npm`.
 pub fn get_pm(cli: App) -> PackageManager {
   let matches = cli.get_matches();
 
-  let is_npm = matches.is_present("npm");
-  let is_pnpm = matches.is_present("pnpm");
-  let is_yarn = matches.is_present("yarn");
+  let pm_matrix = (
+    matches.is_present("npm"),
+    matches.is_present("pnpm"),
+    matches.is_present("yarn"),
+  );
 
-  let pm = match (is_npm, is_pnpm, is_yarn) {
+  let pm_from_env = env::var_os("SX_PM").map_or(PackageManager::Npm, |value| {
+    if let Some(pm) = value.to_ascii_lowercase().to_str() {
+      return match pm {
+        | "npm" => PackageManager::Npm,
+        | "pnpm" => PackageManager::Pnpm,
+        | "yarn" => PackageManager::Yarn,
+        | _ => PackageManager::Npm,
+      };
+    }
+
+    PackageManager::Npm
+  });
+
+  match pm_matrix {
     | (true, _, _) => PackageManager::Npm,
     | (_, true, _) => PackageManager::Pnpm,
     | (_, _, true) => PackageManager::Yarn,
-    // TODO: Get from env or default to npm.
-    | (_, _, _) => PackageManager::Npm,
-  };
-
-  pm
+    | (_, _, _) => pm_from_env,
+  }
 }

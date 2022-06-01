@@ -22,7 +22,7 @@ fn main() {
           let Script { script, command, .. } = &item;
           let separator = Symbols::MiddleDot.as_str();
 
-          println!("Executing: {} {} {}", script, separator, command);
+          println!("Executing: {script} {separator} {command}");
 
           match app::execute_script(pm, item) {
             | Err(error) => {
