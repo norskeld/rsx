@@ -1,15 +1,18 @@
 mod app;
+mod cli;
 mod prompt;
 
 use std::process;
 
-use app::{PackageManager, Script};
+use app::Script;
 use prompt::{Prompt, SelectPrompt, Symbols};
 
 fn main() {
+  let cli = cli::create_cli();
+  let pm = cli::get_pm(cli);
+
   match app::load_scripts() {
     | Ok(options) => {
-      let pm = PackageManager::Npm; // TODO: Get this from env/cmd.
       let limit = options.len() * 2;
 
       let mut prompt = SelectPrompt::new("Pick a script to execute", options, limit);

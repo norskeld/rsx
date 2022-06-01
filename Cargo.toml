@@ -10,7 +10,11 @@ license = "MIT"
 crossterm = "0.22"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0", features = ["preserve_order"] }
-structopt = "0.3"
+clap = { version = "3.0.5", features = ["cargo", "wrap_help"] }
+
+[[bin]]
+name = "sx"
+path = "src/main.rs"
 
 [profile.release]
 lto = true

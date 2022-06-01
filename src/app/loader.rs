@@ -28,7 +28,7 @@ fn produce_scripts(scripts_map: &Map<String, Value>) -> Vec<Script> {
       // `null` or something else.
       let command = match value.as_str() {
         | Some(command) => command.to_string(),
-        | None => "".to_string(),
+        | None => String::new(),
       };
 
       Script { id, script, command }

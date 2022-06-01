@@ -3,15 +3,15 @@ use std::process::{Command, ExitStatus};
 use super::{AppError, PackageManager, Script};
 
 /// Executes a given script with specified package manager: npm, pnpm or yarn.
-pub fn execute_script(package_manager: PackageManager, script: Script) -> Result<ExitStatus, AppError> {
-  let mut cmd = Command::new(package_manager.as_str());
+pub fn execute_script(pm: PackageManager, script: Script) -> Result<ExitStatus, AppError> {
+  let mut cmd = Command::new(pm.as_str());
 
   // We need only the `script` field, so destructuring it on assignment.
   let Script { script, .. } = script;
 
   // npm/pnpm run some-script
   // yarn some-script
-  let cmd_args = match package_manager {
+  let cmd_args = match pm {
     | PackageManager::Npm | PackageManager::Pnpm => vec!["run", script.as_str()],
     | PackageManager::Yarn => vec![script.as_str()],
   };
@@ -28,7 +28,7 @@ pub fn execute_script(package_manager: PackageManager, script: Script) -> Result
       )),
     }
   } else {
-    let pm = package_manager.as_str();
+    let pm = pm.as_str();
     let args = cmd_args.join(" ");
 
     Err(AppError(format!("Couldn't spawn '{} {}'.", pm, args)))
