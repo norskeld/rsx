@@ -11,10 +11,10 @@ Micro CLI for interactive execution of npm & yarn scripts.
 You can install CLI with [cargo]. `rustc` must be installed as well, preferably the latest **stable**.
 
 ```bash
-cargo install --git https://github.com/norskeld/rsx
+cargo install --locked --git https://github.com/norskeld/rsx
 ```
 
-This will fetch the repository and install a global binary named `sx`.
+This will fetch the repository, compile (respecting the `Cargo.lock`, hence that `--locked` flag), and install a global binary named `sx`.
 
 ## Features
 
