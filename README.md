@@ -6,9 +6,19 @@
 
 Micro CLI for interactive execution of npm & yarn scripts.
 
+## Installation
+
+You can install CLI with [cargo]. `rustc` must be installed as well, preferably the latest **stable**.
+
+```bash
+cargo install --git https://github.com/norskeld/rsx
+```
+
+This will fetch the repository and install a global binary named `sx`.
+
 ## Motivation
 
-**First**, I wanted to practise creating Rust apps.
+**First**, I wanted to practise creating Rust command-line apps.
 
 **Secondly**, I'm lazy. Like, _really lazy_. I don't even like to type much. And sometimes I'm perplexed by amount of steps required to run an npm or yarn script. Especially if you can't remember what scripts a project even has without diving into an IDE or `cat`ing (`less`ing, `bat`ing, whatever) a `package.json`.
 
@@ -38,3 +48,7 @@ Maybe:
 ## License
 
 [MIT](LICENSE).
+
+<!-- Links -->
+
+[cargo]: https://doc.rust-lang.org/cargo/
