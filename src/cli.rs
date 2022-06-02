@@ -1,14 +1,14 @@
 use std::env;
 
-use clap::{App, ArgGroup};
+use clap::{ArgGroup, Command};
 
 use crate::app::PackageManager;
 
 /// Creates a clap app.
-pub fn create_cli() -> App<'static> {
+pub fn create_cli() -> Command<'static> {
   const PM_HEADING: &str = "PACKAGE MANAGERS";
 
-  App::new(clap::crate_name!())
+  Command::new(clap::crate_name!())
     .version(clap::crate_version!())
     .about(clap::crate_description!())
     // Flags for selecting package manager.
@@ -40,7 +40,7 @@ pub fn create_cli() -> App<'static> {
 /// - Flags have priority over everything.
 /// - If `SX_PM` is set to something valid and no flag present, then use it.
 /// - If nothing else matched, use the default package manager - `npm`.
-pub fn get_pm(cli: App) -> PackageManager {
+pub fn get_pm(cli: Command) -> PackageManager {
   let matches = cli.get_matches();
 
   let pm_matrix = (
