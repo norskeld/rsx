@@ -12,10 +12,8 @@ fn main() {
   let pm = cli::get_pm(cli);
 
   match app::load_scripts() {
-    | Ok(options) => {
-      let limit = options.len() * 2;
-
-      let mut prompt = SelectPrompt::new("Pick a script to execute", options, limit);
+    | Ok(ref options) => {
+      let mut prompt = SelectPrompt::new("Pick a script to execute", options.to_vec());
 
       match prompt.run() {
         | Ok(Some(item)) => {

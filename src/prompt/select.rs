@@ -15,7 +15,6 @@ pub struct SelectPrompt<T> {
   state: State,
   items: Vec<T>,
   current: usize,
-  limit: usize,
 }
 
 impl<T: Debug> Debug for SelectPrompt<T> {
@@ -29,13 +28,12 @@ impl<T: Debug> Debug for SelectPrompt<T> {
 }
 
 impl<T: Clone + Display> SelectPrompt<T> {
-  pub fn new<S: Into<String>>(message: S, items: Vec<T>, limit: usize) -> SelectPrompt<T> {
+  pub fn new<S: Into<String>>(message: S, items: Vec<T>) -> SelectPrompt<T> {
     SelectPrompt {
       message: message.into(),
       state: State::default(),
       items,
       current: 0,
-      limit,
     }
   }
 }
@@ -77,7 +75,7 @@ impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
     let (_, rows) = terminal::size()?;
 
     let limit = self.items.len();
-    let total = std::cmp::min(self.limit, (rows - 1) as usize);
+    let total = std::cmp::min(limit, (rows - 1) as usize);
 
     let (start_index, end_index) = utils::calculate_limit_indexes(self.current, limit, total);
 
