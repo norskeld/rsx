@@ -20,7 +20,11 @@ This will fetch the repository, compile (respecting the `Cargo.lock`, hence that
 
 Basic:
 
-- [x] Interactively select and run scripts from `package.json` in the current working directory.
+- [x] Interactively select and run scripts from `package.json` in the current working directory:
+  - [x] Use arrows *or* <kbd>J</kbd> / <kbd>K</kbd> keys to select a script.
+  - [x] Press <kbd>Ctrl+A</kbd> / <kbd>Home</kbd> to jump to the beginning.
+  - [x] Press <kbd>Ctrl+E</kbd> / <kbd>End</kbd> to jump to the end.
+  - [x] Press <kbd>Ctrl+C</kbd> / <kbd>Esc</kbd> to abort selection.
 - [x] Use different package managers: **npm**, **pnpm**, or **yarn**.
 - [x] Override default package manager (**npm**) through env variable.
 
