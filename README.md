@@ -37,7 +37,7 @@ Planned:
 - [ ] Prettify output.
 - [ ] Quickly find scripts by simply typing their name.
 - [ ] Select multiple scripts and run them in order.
-- [x] Pass a script name (or names) directly as argument.
+- [x] Pass a script name directly as argument.
 
 Maybe:
 

@@ -23,7 +23,7 @@ pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), A
   run((pm, script))
 }
 
-/// Checks if provided script name is present in the loaded from `package.json` scripts, and then executes it.
+/// Checks if provided script name is present in scripts loaded from `package.json`, and then executes it.
 pub fn run_direct(pm: PackageManager, options: Vec<Script>, selection: String) -> Result<(), AppError> {
   options
     .iter()
