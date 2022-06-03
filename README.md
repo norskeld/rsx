@@ -6,6 +6,10 @@
 
 Micro CLI for interactive execution of npm & yarn scripts.
 
+## Preview
+
+[![asciicast](https://asciinema.org/a/499299.svg)](https://asciinema.org/a/499299)
+
 ## Installation
 
 You can install CLI with [cargo]. `rustc` must be installed as well, preferably the latest **stable**.
