@@ -10,8 +10,14 @@ pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), A
 
   let script = match prompt.run() {
     | Ok(Some(script)) => script,
-    | Ok(None) => return Ok(println!("Nothing was picked")),
-    | Err(error) => return Ok(eprintln!("Something happened: {error:?}")),
+    | Ok(None) => {
+      println!("Nothing was picked");
+      return Ok(());
+    },
+    | Err(error) => {
+      eprintln!("Something happened: {error:?}");
+      return Ok(());
+    },
   };
 
   run((pm, script))
@@ -34,8 +40,10 @@ fn run((pm, selection): (PackageManager, Script)) -> Result<(), AppError> {
     separator = Symbols::MiddleDot.as_str()
   );
 
-  Ok(if let Err(AppError(error)) = app::execute_script(pm, selection) {
+  if let Err(AppError(error)) = app::execute_script(pm, selection) {
     eprintln!("{error}");
     process::exit(1);
-  })
+  }
+
+  Ok(())
 }
