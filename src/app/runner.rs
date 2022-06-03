@@ -11,11 +11,11 @@ pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), A
   let script = match prompt.run() {
     | Ok(Some(script)) => script,
     | Ok(None) => {
-      println!("Nothing was picked");
+      println!("Nothing was picked.");
       return Ok(());
     },
     | Err(error) => {
-      eprintln!("Something happened: {error:?}");
+      eprintln!("Something happened: {error:?}.");
       return Ok(());
     },
   };
@@ -28,7 +28,7 @@ pub fn run_direct(pm: PackageManager, options: Vec<Script>, selection: String) -
   options
     .iter()
     .find(|&Script { script, .. }| script == &selection)
-    .ok_or_else(|| AppError(format!("There's no script named '{selection}'")))
+    .ok_or_else(|| AppError(format!("There's no script named '{selection}'.")))
     .map(|script| run((pm, script.to_owned())))?
 }
 

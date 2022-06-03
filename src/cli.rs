@@ -25,20 +25,20 @@ impl Cli {
       .version(clap::crate_version!())
       .about(clap::crate_description!())
       // Positional argument.
-      .arg(clap::arg!([script] "Script to execute directly.").required(false))
+      .arg(clap::arg!([script] "Script to execute directly").required(false))
       // Flags for selecting package manager.
       .arg(
-        clap::arg!(-n --npm "Use npm to run script.")
+        clap::arg!(-n --npm "Use npm to run script")
           .required(false)
           .help_heading(PM_HEADING),
       )
       .arg(
-        clap::arg!(-p --pnpm "Use pnpm to run script.")
+        clap::arg!(-p --pnpm "Use pnpm to run script")
           .required(false)
           .help_heading(PM_HEADING),
       )
       .arg(
-        clap::arg!(-y --yarn "Use yarn to run script.")
+        clap::arg!(-y --yarn "Use yarn to run script")
           .required(false)
           .help_heading(PM_HEADING),
       )

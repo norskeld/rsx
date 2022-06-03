@@ -1,5 +1,5 @@
 /// Supported/available package managers.
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum PackageManager {
   Npm,
   Pnpm,
