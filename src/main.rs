@@ -4,39 +4,29 @@ mod prompt;
 
 use std::process;
 
-use app::Script;
-use prompt::{Prompt, SelectPrompt, Symbols};
+use cli::Cli;
+use app::AppError;
 
 fn main() {
-  let cli = cli::create_cli();
-  let pm = cli::get_pm(cli);
+  let cli = Cli::new();
 
   match app::load_scripts() {
-    | Ok(ref options) => {
-      let mut prompt = SelectPrompt::new("Pick a script to execute", options.to_vec());
+    | Ok(options) => {
+      let pm = cli.get_pm();
 
-      match prompt.run() {
-        | Ok(Some(item)) => {
-          let Script { script, command, .. } = &item;
-          let separator = Symbols::MiddleDot.as_str();
+      let result = match cli.get_script() {
+        | Some(script) => app::run_direct(pm, options, script),
+        | None => app::run_interactive(pm, options),
+      };
 
-          println!("Executing: {script} {separator} {command}");
-
-          match app::execute_script(pm, item) {
-            | Err(error) => {
-              println!("{}", error);
-              process::exit(1);
-            },
-            | _ => {},
-          }
-        },
-        | Ok(None) => println!("Nothing was picked. Bye!"),
-        | Err(error) => println!("Oof, something happened: {:?}", error),
+      if let Err(AppError(error)) = result {
+        println!("{error}");
+        process::exit(1);
       }
     },
-    | Err(error) => {
-      println!("{}", error);
+    | Err(AppError(error)) => {
+      println!("{error}");
       process::exit(1);
     },
-  };
+  }
 }
