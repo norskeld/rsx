@@ -2,11 +2,16 @@ use std::process;
 
 use crate::app;
 use crate::prompt::*;
-use super::{AppError, PackageManager, Script};
+use super::{AppError, Message, PackageManager, Script};
 
 /// Runs a prompt to select a script interactively, and then execute it.
 pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), AppError> {
-  let mut prompt = SelectPrompt::new("Pick a script to execute", options);
+  let prompt_message = Message {
+    message: "Pick a script to execute".to_string(),
+    pm: pm.clone(),
+  };
+
+  let mut prompt = SelectPrompt::new(prompt_message.to_string(), options);
 
   let script = match prompt.run() {
     | Ok(Some(script)) => script,

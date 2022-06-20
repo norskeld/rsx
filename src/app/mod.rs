@@ -4,7 +4,7 @@ pub use executor::execute_script;
 pub use loader::load_scripts;
 pub use pm::PackageManager;
 pub use runner::*;
-pub use script::Script;
+pub use script::*;
 
 // Private modules.
 mod error;

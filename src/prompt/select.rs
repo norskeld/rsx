@@ -4,7 +4,7 @@ use std::io::{self, Write};
 
 use crossterm::{cursor, queue};
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
-use crossterm::style::{style, Attribute, Color, Print, PrintStyledContent, Stylize};
+use crossterm::style::{style, Print, PrintStyledContent, Stylize};
 use crossterm::terminal::{self, Clear, ClearType};
 
 use super::{Prompt, State, Symbols};
@@ -95,7 +95,7 @@ impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
       stdout,
       utils::print_state_symbol(&self.state),
       Print(" "),
-      PrintStyledContent(style(&self.message).attribute(Attribute::Bold))
+      PrintStyledContent(self.message.clone().bold())
     )?;
 
     if !self.state.is_done() {
@@ -114,34 +114,26 @@ impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
           stdout,
           Print("\n\r"),
           PrintStyledContent(if idx == self.current {
-            style(Symbols::Pointer.as_str()).with(Color::Cyan)
+            Symbols::Pointer.as_str().cyan()
           } else {
             style(" ")
           }),
           Print(format!(" {} ", prefix)),
           PrintStyledContent(if idx == self.current {
-            style(choice).attribute(Attribute::Bold).with(Color::Cyan)
+            choice.cyan()
           } else {
-            style(choice)
+            choice.white()
           }),
         )?;
       }
     }
-
-    // if self.state == State::Completed {
-    //   queue!(
-    //     stdout,
-    //     Print(" "),
-    //     print_input_symbol(&self.state),
-    //     Print(self.items[self.current].to_string())
-    //   )?;
-    // }
 
     if self.state.is_done() {
       queue!(stdout, Print("\n\r"), cursor::Show)?;
     }
 
     stdout.flush()?;
+
     crossterm::Result::Ok(())
   }
 
