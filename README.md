@@ -35,6 +35,9 @@ Basic:
 Planned:
 
 - [ ] Prettify output.
+  - [x] Display current package manager.
+  - [x] Dim script command.
+  - [ ] Refactor status and "Executing..." message handling and styling.
 - [ ] Quickly find scripts by simply typing their name.
 - [ ] Select multiple scripts and run them in order.
 - [x] Pass a script name directly as argument.
