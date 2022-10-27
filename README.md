@@ -12,13 +12,20 @@ Micro CLI for interactive execution of npm & yarn scripts.
 
 ## Installation
 
-You can install CLI with [cargo]. `rustc` must be installed as well, preferably the latest **stable**.
+### macOS Intel (Homebrew)
 
-```bash
-cargo install --locked --git https://github.com/norskeld/rsx
+```shell
+brew tap norskeld/tap
+brew install norskeld/tap/rsx
 ```
 
-This will fetch the repository, compile (respecting the `Cargo.lock`, hence that `--locked` flag), and install a global binary named `sx`.
+### macOS / Linux / Windows (Cargo)
+
+Make sure to [install Rust toolchain][rust-toolchain] first. After that you can install rsx via **Cargo**:
+
+```shell
+cargo install --locked --git https://github.com/norskeld/rsx
+```
 
 ## Features
 
