@@ -11,7 +11,11 @@ use super::{AppError, Script};
 fn resolve_pkg_path() -> Result<PathBuf, AppError> {
   match env::current_dir() {
     | Ok(dir) => Ok(dir.join("package.json")),
-    | Err(_) => Err(AppError("Couldn't resolve the current working directory.".to_string())),
+    | Err(_) => {
+      Err(AppError(
+        "Couldn't resolve the current working directory.".to_string(),
+      ))
+    },
   }
 }
 
@@ -23,15 +27,19 @@ fn produce_scripts(scripts_map: &Map<String, Value>) -> Vec<Script> {
     .map(|(id, (key, value))| {
       let script = key.to_string();
 
-      // Raw conversion to string leaves JSON representation, so strings are in quotes. This piece works that around.
-      // Also we gracefully default to an empty string if command in JSON wasn't actually a string, and instead it was
-      // `null` or something else.
+      // Raw conversion to string leaves JSON representation, so strings are in quotes. This piece
+      // works that around. Also we gracefully default to an empty string if command in JSON wasn't
+      // actually a string, and instead it was `null` or something else.
       let command = match value.as_str() {
         | Some(command) => command.to_string(),
         | None => String::new(),
       };
 
-      Script { id, script, command }
+      Script {
+        id,
+        script,
+        command,
+      }
     })
     .collect::<Vec<Script>>()
 }

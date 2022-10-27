@@ -23,9 +23,11 @@ pub fn execute_script(pm: PackageManager, script: Script) -> Result<ExitStatus, 
   if let Ok(mut child) = cmd.spawn() {
     match child.wait() {
       | Ok(exit_status) => Ok(exit_status),
-      | Err(_) => Err(AppError(
-        "Wasn't able to wait for child process to exit completely.".to_string(),
-      )),
+      | Err(_) => {
+        Err(AppError(
+          "Wasn't able to wait for child process to exit completely.".to_string(),
+        ))
+      },
     }
   } else {
     let pm = pm.as_str();

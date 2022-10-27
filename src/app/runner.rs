@@ -1,8 +1,8 @@
 use std::process;
 
+use super::{AppError, Message, PackageManager, Script};
 use crate::app;
 use crate::prompt::*;
-use super::{AppError, Message, PackageManager, Script};
 
 /// Runs a prompt to select a script interactively, and then execute it.
 pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), AppError> {
@@ -28,8 +28,13 @@ pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), A
   run((pm, script))
 }
 
-/// Checks if provided script name is present in scripts loaded from `package.json`, and then executes it.
-pub fn run_direct(pm: PackageManager, options: Vec<Script>, selection: String) -> Result<(), AppError> {
+/// Checks if provided script name is present in scripts loaded from `package.json`, and then
+/// executes it.
+pub fn run_direct(
+  pm: PackageManager,
+  options: Vec<Script>,
+  selection: String,
+) -> Result<(), AppError> {
   options
     .iter()
     .find(|&Script { script, .. }| script == &selection)
@@ -38,7 +43,9 @@ pub fn run_direct(pm: PackageManager, options: Vec<Script>, selection: String) -
 }
 
 fn run((pm, selection): (PackageManager, Script)) -> Result<(), AppError> {
-  let Script { script, command, .. } = &selection;
+  let Script {
+    script, command, ..
+  } = &selection;
 
   println!(
     "Executing: {script} {separator} {command}",

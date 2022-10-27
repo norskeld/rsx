@@ -3,8 +3,8 @@ use std::fmt::{Display, Formatter, Result};
 use crossterm::style::Stylize;
 use serde::{Deserialize, Serialize};
 
-use crate::prompt::Symbols;
 use super::PackageManager;
+use crate::prompt::Symbols;
 
 #[derive(Clone, Debug)]
 pub struct Message {

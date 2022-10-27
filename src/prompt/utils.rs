@@ -15,7 +15,11 @@ pub fn is_event_abortable(event: KeyEvent) -> bool {
 }
 
 pub fn calculate_limit_indexes(current: usize, total: usize, limit: usize) -> (usize, usize) {
-  let start_index = std::cmp::min(total.saturating_sub(limit), current.saturating_sub(limit / 2));
+  let start_index = std::cmp::min(
+    total.saturating_sub(limit),
+    current.saturating_sub(limit / 2),
+  );
+
   let end_index = std::cmp::min(start_index + limit, total);
 
   (start_index, end_index)

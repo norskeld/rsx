@@ -4,8 +4,8 @@ mod prompt;
 
 use std::process;
 
-use cli::Cli;
 use app::AppError;
+use cli::Cli;
 
 fn main() {
   let cli = Cli::new();

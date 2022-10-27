@@ -1,5 +1,5 @@
 {
-  "editor.rulers": [120],
+  "editor.rulers": [100],
   "editor.formatOnSave": true,
   "editor.inlayHints.enabled": "offUnlessPressed",
   "rust-analyzer.rustfmt.extraArgs": ["+nightly"],

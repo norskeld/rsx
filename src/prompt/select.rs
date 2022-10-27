@@ -2,13 +2,13 @@ use std::clone::Clone;
 use std::fmt::{self, Debug, Display, Formatter};
 use std::io::{self, Write};
 
-use crossterm::{cursor, queue};
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::style::{style, Print, PrintStyledContent, Stylize};
 use crossterm::terminal::{self, Clear, ClearType};
+use crossterm::{cursor, queue};
 
-use super::{Prompt, State, Symbols};
 use super::utils;
+use super::{Prompt, State, Symbols};
 
 pub struct SelectPrompt<T> {
   message: String,
@@ -157,7 +157,9 @@ impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
         | KeyCode::Home => self.current = 0,
         | KeyCode::End => self.current = self.items.len() - 1,
         | KeyCode::Char('k') | KeyCode::Up => self.current = self.current.saturating_sub(1),
-        | KeyCode::Char('j') | KeyCode::Down => self.current = std::cmp::min(self.current + 1, self.items.len() - 1),
+        | KeyCode::Char('j') | KeyCode::Down => {
+          self.current = std::cmp::min(self.current + 1, self.items.len() - 1)
+        },
         | _ => {},
       }
     }

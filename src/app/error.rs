@@ -5,7 +5,9 @@ pub struct AppError(pub String);
 
 impl fmt::Debug for AppError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    f.debug_struct("AppError").field("message", &self.0).finish()
+    f.debug_struct("AppError")
+      .field("message", &self.0)
+      .finish()
   }
 }
 

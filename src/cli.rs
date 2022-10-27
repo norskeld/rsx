@@ -83,10 +83,10 @@ impl Cli {
     });
 
     match pm_matrix {
-      | (true, _, _) => PackageManager::Npm,
+      | (true, ..) => PackageManager::Npm,
       | (_, true, _) => PackageManager::Pnpm,
       | (_, _, true) => PackageManager::Yarn,
-      | (_, _, _) => pm_from_env,
+      | (..) => pm_from_env,
     }
   }
 }
