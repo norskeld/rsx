@@ -70,3 +70,4 @@ If you are like me—read on.
 <!-- Links -->
 
 [cargo]: https://doc.rust-lang.org/cargo/
+[rust-toolchain]: https://www.rust-lang.org/tools/install
