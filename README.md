@@ -1,6 +1,6 @@
 # `»` rsx
 
-[![Checks](https://img.shields.io/github/actions/workflow/status/norskeld/rsx/check.yml?style=flat-square&colorA=22272d&colorB=22272d)](https://github.com/norskeld/rsx/actions)
+[![Checks](https://img.shields.io/github/actions/workflow/status/norskeld/rsx/check.yml?style=flat-square&colorA=22272d&colorB=22272d&label=checks)](https://github.com/norskeld/rsx/actions)
 
 > `R`usty `S`cripts E`x`ecutor
 
