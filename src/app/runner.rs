@@ -5,7 +5,11 @@ use crate::app;
 use crate::prompt::*;
 
 /// Runs a prompt to select a script interactively, and then execute it.
-pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), AppError> {
+pub fn run_interactive(
+  pm: PackageManager,
+  options: Vec<Script>,
+  args: Vec<String>,
+) -> Result<(), AppError> {
   let prompt_message = Message {
     message: "Pick a script to execute".to_string(),
     pm: pm.clone(),
@@ -25,7 +29,7 @@ pub fn run_interactive(pm: PackageManager, options: Vec<Script>) -> Result<(), A
     },
   };
 
-  run((pm, script))
+  run((pm, script), args)
 }
 
 /// Checks if provided script name is present in scripts loaded from `package.json`, and then
@@ -34,25 +38,29 @@ pub fn run_direct(
   pm: PackageManager,
   options: Vec<Script>,
   selection: String,
+  args: Vec<String>,
 ) -> Result<(), AppError> {
   options
     .iter()
     .find(|&Script { script, .. }| script == &selection)
     .ok_or_else(|| AppError(format!("There's no script named '{selection}'.")))
-    .map(|script| run((pm, script.to_owned())))?
+    .map(|script| run((pm, script.to_owned()), args))?
 }
 
-fn run((pm, selection): (PackageManager, Script)) -> Result<(), AppError> {
-  let Script {
-    script, command, ..
-  } = &selection;
+fn run((pm, selection): (PackageManager, Script), args: Vec<String>) -> Result<(), AppError> {
+  let command = format!(
+    "{cmd} -- {args}",
+    cmd = &selection.command,
+    args = args.join(" ")
+  );
 
   println!(
     "Executing: {script} {separator} {command}",
+    script = &selection.script,
     separator = Symbols::MiddleDot.as_str()
   );
 
-  if let Err(AppError(error)) = app::execute_script(pm, selection) {
+  if let Err(AppError(error)) = app::execute_script(pm, selection, args) {
     eprintln!("{error}");
     process::exit(1);
   }

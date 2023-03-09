@@ -13,10 +13,11 @@ fn main() {
   match app::load_scripts() {
     | Ok(options) => {
       let pm = cli.get_pm();
+      let args = cli.get_args();
 
       let result = match cli.get_script() {
-        | Some(script) => app::run_direct(pm, options, script),
-        | None => app::run_interactive(pm, options),
+        | Some(script) => app::run_direct(pm, options, script, args),
+        | None => app::run_interactive(pm, options, args),
       };
 
       if let Err(AppError(error)) = result {

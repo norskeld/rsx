@@ -1,7 +1,7 @@
 use std::env;
 use std::rc::Rc;
 
-use clap::{ArgGroup, ArgMatches, Command};
+use clap::{ArgMatches, Command};
 
 use crate::app::PackageManager;
 
@@ -18,14 +18,20 @@ impl Cli {
   }
 
   /// Creates a clap app.
-  pub fn create_app() -> Command<'static> {
-    const PM_HEADING: &str = "PACKAGE MANAGERS";
+  pub fn create_app() -> Command {
+    const PM_HEADING: &str = "Package managers";
 
     Command::new(clap::crate_name!())
       .version(clap::crate_version!())
       .about(clap::crate_description!())
       // Positional argument.
       .arg(clap::arg!([script] "Script to execute directly").required(false))
+      // Rest arguments (after --) that can be passed to a script.
+      .arg(
+        clap::arg!([args] "Arguments to pass to a script")
+          .num_args(1..)
+          .last(true),
+      )
       // Flags for selecting package manager.
       .arg(
         clap::arg!(-n --npm "Use npm to run script")
@@ -42,17 +48,11 @@ impl Cli {
           .required(false)
           .help_heading(PM_HEADING),
       )
-      // Logically group flags under "package-manager" label.
-      .group(
-        ArgGroup::new("package-manager")
-          .args(&["npm", "pnpm", "yarn"])
-          .required(false),
-      )
   }
 
   /// Gets a script passed in as positional argument.
   pub fn get_script(&self) -> Option<String> {
-    self.matches.value_of("script").map(str::to_string)
+    self.matches.get_one::<String>("script").map(String::clone)
   }
 
   /// Resolves package manager from env and/or clap app. Rules:
@@ -64,9 +64,9 @@ impl Cli {
     let matches = &self.matches;
 
     let pm_matrix = (
-      matches.is_present("npm"),
-      matches.is_present("pnpm"),
-      matches.is_present("yarn"),
+      matches.contains_id("npm"),
+      matches.contains_id("pnpm"),
+      matches.contains_id("yarn"),
     );
 
     let pm_from_env = env::var_os("SX_PM").map_or(PackageManager::Npm, |value| {
@@ -88,5 +88,14 @@ impl Cli {
       | (_, _, true) => PackageManager::Yarn,
       | (..) => pm_from_env,
     }
+  }
+
+  /// Gets additional arguments (after --) that can be passed to a script.
+  pub fn get_args(&self) -> Vec<String> {
+    self
+      .matches
+      .get_many::<String>("args")
+      .map(|vals| vals.cloned().collect::<Vec<String>>())
+      .unwrap_or_default()
   }
 }

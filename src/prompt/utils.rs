@@ -4,7 +4,9 @@ use crossterm::style::{style, Color, PrintStyledContent, Stylize};
 use super::{State, Symbols};
 
 pub fn is_event_abortable(event: KeyEvent) -> bool {
-  let KeyEvent { modifiers, code } = event;
+  let KeyEvent {
+    modifiers, code, ..
+  } = event;
 
   match (modifiers, code) {
     | (KeyModifiers::CONTROL, KeyCode::Char('c')) => true,
