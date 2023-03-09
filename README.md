@@ -39,7 +39,9 @@ cargo install --locked --git https://github.com/norskeld/rsx
 
 ## Features
 
-### Basic
+### Implemented
+
+You can:
 
 - [x] Interactively select and run scripts from `package.json` in the current working directory:
   - [x] Use arrows _or_ <kbd>J</kbd> / <kbd>K</kbd> keys to select a script.
@@ -48,20 +50,25 @@ cargo install --locked --git https://github.com/norskeld/rsx
   - [x] Press <kbd>Ctrl+C</kbd> / <kbd>Esc</kbd> to abort selection.
 - [x] Use different package managers: **npm**, **pnpm**, or **yarn**.
 - [x] Override default package manager (**npm**) through env variable.
+- [x] Pass a script name directly as argument and run via the selected package manager.
+- [x] Pass additional arguments after `--` to a selected script.
 
 ### Planned
 
+- [ ] Determine package manager automatically. This can be done using simple heuristics like:
+  - Checking the lock files, they all differ between different package managers.
+  - Check the `packageManager` field in `package.json`.
+  - Briefly check contents of the `node_modules`.
 - [ ] Prettify output.
   - [x] Display current package manager.
   - [x] Dim script command.
+  - [ ] Properly wrap too long script commands.
   - [ ] Refactor status and "Executing..." message handling and styling.
 - [ ] Quickly find scripts by simply typing their name.
 - [ ] Select multiple scripts and run them in order.
-- [x] Pass a script name directly as argument.
 
 ### Maybe
 
-- [ ] Maybe support `packageManager` field in `package.json`.
 - [ ] Maybe support monorepos.
 
 ## License
