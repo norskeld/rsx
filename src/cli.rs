@@ -64,9 +64,9 @@ impl Cli {
     let matches = &self.matches;
 
     let pm_matrix = (
-      matches.contains_id("npm"),
-      matches.contains_id("pnpm"),
-      matches.contains_id("yarn"),
+      matches.get_flag("npm"),
+      matches.get_flag("pnpm"),
+      matches.get_flag("yarn"),
     );
 
     let pm_from_env = env::var_os("SX_PM").map_or(PackageManager::Npm, |value| {
