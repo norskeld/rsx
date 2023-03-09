@@ -118,7 +118,7 @@ impl<T: Clone + Display> Prompt<T> for SelectPrompt<T> {
           } else {
             style(" ")
           }),
-          Print(format!(" {} ", prefix)),
+          Print(format!(" {prefix} ")),
           PrintStyledContent(if idx == self.current {
             choice.cyan()
           } else {
