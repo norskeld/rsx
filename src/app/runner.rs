@@ -48,11 +48,14 @@ pub fn run_direct(
 }
 
 fn run((pm, selection): (PackageManager, Script), args: Vec<String>) -> Result<(), AppError> {
-  let command = format!(
-    "{cmd} -- {args}",
-    cmd = &selection.command,
-    args = args.join(" ")
-  );
+  let command = if args.is_empty() {
+    selection.command.to_string()
+  } else {
+    let cmd = &selection.command;
+    let args = args.join(" ");
+
+    format!("{cmd} -- {args}")
+  };
 
   println!(
     "Executing: {script} {separator} {command}",
