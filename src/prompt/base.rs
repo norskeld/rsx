@@ -4,8 +4,9 @@ pub trait Prompt<T> {
   fn handle(&mut self, event: crossterm::event::KeyEvent);
 }
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Default)]
 pub enum State {
+  #[default]
   Created,
   Running,
   Aborted,
@@ -15,11 +16,5 @@ pub enum State {
 impl State {
   pub fn is_done(&self) -> bool {
     *self == State::Aborted || *self == State::Completed
-  }
-}
-
-impl Default for State {
-  fn default() -> State {
-    State::Created
   }
 }
