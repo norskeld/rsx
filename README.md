@@ -8,7 +8,7 @@ Micro CLI for interactive execution of npm & yarn scripts.
 
 ## Preview
 
-[![asciicast](https://asciinema.org/a/499299.svg)](https://asciinema.org/a/499299)
+[![asciicast](https://asciinema.org/a/566078.svg)](https://asciinema.org/a/566078)
 
 ## Motivation
 
