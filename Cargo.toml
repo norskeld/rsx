@@ -1,7 +1,7 @@
 [package]
 name = "rsx"
 version = "0.2.0"
-authors = ["Vladislav Mamon <hello@vm.codes>"]
+authors = ["Vladislav Mamon <vlad@nrsk.dev>"]
 description = "Micro CLI for interactive execution of npm & yarn scripts."
 edition = "2018"
 license = "MIT"
