@@ -1,4 +1,3 @@
-use std::clone::Clone;
 use std::fmt::{self, Debug, Display, Formatter};
 use std::io::{self, Write};
 

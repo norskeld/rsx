@@ -52,7 +52,7 @@ impl Cli {
 
   /// Gets a script passed in as positional argument.
   pub fn get_script(&self) -> Option<String> {
-    self.matches.get_one::<String>("script").map(String::clone)
+    self.matches.get_one::<String>("script").cloned()
   }
 
   /// Resolves package manager from env and/or clap app. Rules:
